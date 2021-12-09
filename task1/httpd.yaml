@@ -5,28 +5,36 @@
   become_method: sudo
   gather_facts: True
   tasks: 
-    - name: install httpd
+    - name: Install pakages
       yum:
-        name: httpd
+        name: "{{ item }}"
         state: present
-    - name: create default doc root
+      loop: 
+        - httpd
+
+    - name: Create index.html
       file: 
-        path: /var/www/html/index.html
+        path: "{{ INDEX_HTML_PATH }}"
         state: touch
         owner: apache
         group: apache
+    - name: Copy content to index.html
       copy:
-        content: Welcome to my web server
+        content: "{{ INDEX_HTML_CONTENT }}"
         dest:  /var/www/html/index.html
     - name: start service apache
       service: 
-        name: httpd
+        name: "{{ HTTPD_SERVICE }}"
         state: started
         enabled: yes
-    - name: enable httpd service   
-    - name: open httpd port
-      firewalld: 
-        port: 80/tcp
-        state: enabled
+         
+    - name: open 80\443 ports
+      firewalld:
         zone: public
+        service:
+          name:
+            - https
+            - http
         permanent: yes
+        state: enabled
+      notify: reload firewalld  
