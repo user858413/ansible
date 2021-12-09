@@ -23,7 +23,7 @@ EOF
     User vagrant
     IdentityFile ~/.ssh/ansible
   Host node2
-    HostName node1.example.com
+    HostName node2.example.com
     User vagrant
     IdentityFile ~/.ssh/ansible
 EOF

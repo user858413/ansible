@@ -18,23 +18,37 @@
         state: touch
         owner: apache
         group: apache
+
     - name: Copy content to index.html
       copy:
         content: "{{ INDEX_HTML_CONTENT }}"
         dest:  /var/www/html/index.html
+
     - name: start service apache
       service: 
         name: "{{ HTTPD_SERVICE }}"
         state: started
-        enabled: yes
+        enabled: yes  
          
     - name: open 80\443 ports
       firewalld:
         zone: public
-        service:
-          name:
-            - https
-            - http
+        port: "{{ item }}"
         permanent: yes
         state: enabled
-      notify: reload firewalld  
+      notify: Reload firewalld
+      loop:
+        - 80/tcp
+        - 443/tcp
+    
+  handlers:
+    - name: Restart apache
+      ansible.builtin.service:
+        name: httpd
+        state: restarted
+    
+    - name: Reload firewalld
+      ansible.builtin.service:
+        name: firewalld
+        state: reloaded
+        
