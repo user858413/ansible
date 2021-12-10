@@ -1,5 +1,5 @@
 ---
-- hosts: node1
+- hosts: all
   gather_facts: True
   tasks:
     - name: Ensure SELinux is set to enforcing mode
