@@ -1,0 +1,16 @@
+---
+- hosts: all
+  # become: yes
+  # become_method: sudo
+  gather_facts: True
+  tasks: 
+    - name: Install pakages
+      yum:
+        name: "{{ item }}"
+        state: absent
+      loop: 
+        - httpd
+    - name: delete index.html
+      file: 
+        path: "{{ INDEX_HTML_PATH }}"
+        state: absent
