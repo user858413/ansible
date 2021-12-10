@@ -1,11 +1,10 @@
 ---
----
 - hosts: all
   gather_facts: True
   tasks:
     - include_vars: 
         dir: vars
-        files_matching: users.yaml
+        files_matching: users_vars.yaml
     
     - name: Add users | create users, shell, home dirs
       user: 
@@ -13,6 +12,5 @@
         shell: /bin/bash 
         createhome: yes 
         comment: '{{ item.username }}@example.com'
-        password: "{{ 'default_user_password' | password_hash('sha512','A512') }}"
+        password: "{{ 'admin_pass' | password_hash('sha512','A512') }}"
       with_items: "{{users}}"
-
