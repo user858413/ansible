@@ -2,7 +2,7 @@
 - hosts: all
   gather_facts: True
   tasks:
-    - name: Ensure SELinux is set to enforcing mode
+    - name: Replace line in {{ GRUB_FILE_PATH }}
       lineinfile:
         path: "{{ GRUB_FILE_PATH }}"
         regexp: 'GRUB_CMDLINE_LINUX\=\"'
