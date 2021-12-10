@@ -1,7 +1,5 @@
 ---
 - hosts: all
-  # become: yes
-  # become_method: sudo
   gather_facts: True
   tasks: 
     - name: Install pakages
@@ -10,7 +8,24 @@
         state: absent
       loop: 
         - httpd
+    
     - name: delete index.html
       file: 
         path: "{{ INDEX_HTML_PATH }}"
         state: absent
+    
+    - name: close 80\443 ports
+      firewalld:
+        zone: public
+        port: "{{ item }}"
+        permanent: yes
+        state: disabled
+      notify: Reload firewalld
+      loop:
+        - 80/tcp
+        - 443/tcp
+  handlers:
+    - name: Reload firewalld
+      ansible.builtin.service:
+        name: firewalld
+        state: reloaded
