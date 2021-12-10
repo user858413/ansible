@@ -12,5 +12,5 @@
         shell: /bin/bash 
         createhome: yes 
         comment: '{{ item.username }}@example.com'
-        password: "{{ 'admin_pass' | password_hash('sha512','A512') }}"
+        password: "{{ admin_pass | string | password_hash('sha512') }}"
       with_items: "{{users}}"
