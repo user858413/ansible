@@ -1,0 +1,12 @@
+---
+- hosts: node1
+  gather_facts: True
+  tasks:
+    - name: Ensure SELinux is set to enforcing mode
+      lineinfile:
+        path: "{{ GRUB_FILE_PATH }}"
+        regexp: 'GRUB_CMDLINE_LINUX\=\"'
+        line: GRUB_CMDLINE_LINUX="no_timer_check console=tty0 console=ttyS0,115200n8 net.ifnames=0 biosdevname=0 elevator=noop"
+    
+    - name: execute grub2-mkconfig
+      command: grub2-mkconfig -o /boot/grub2/grub.cfg

@@ -4,3 +4,4 @@ HTTPS_PORT: 443
 INDEX_HTML_CONTENT: "Welcome to my web server"
 INDEX_HTML_PATH: /var/www/html/index.html
 HTTPD_SERVICE: httpd
+GRUB_FILE_PATH: /etc/default/grub
