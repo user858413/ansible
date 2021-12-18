@@ -12,12 +12,6 @@
     owner: root
     group: root
 
-- name: start service VSFTPD
-  service: 
-    name: "{{ VSFTPD_SERVICE }}"
-    state: started
-    enabled: yes
-
 - name: Set ftpd_anon_write flag on and keep it persistent across reboots
   seboolean:
     name: ftpd_anon_write
@@ -29,6 +23,12 @@
     name: ftpd_full_access
     state: yes
     persistent: yes
+
+- name: start service VSFTPD
+  service: 
+    name: "{{ VSFTPD_SERVICE }}"
+    state: started
+    enabled: yes
  
 - name: Check status of VSFTPD service
   service_facts:
@@ -36,14 +36,21 @@
 - debug:
     var: service_state.ansible_facts.services["vsftpd.service"].state  
      
-- name: open 20\21 ports
+- name: open 21 ports
   firewalld:
-    zone: public
     port: "{{ item }}"
-    permanent: true
+    permanent: yes
     state: enabled
     immediate: true
-  notify: Reload firewalld
+  notify: Restart firewalld
   loop:
     - 20/tcp
     - 21/tcp
+
+- name: configure firewalld
+  firewalld:
+    service: ftp
+    permanent: yes
+    state: enabled
+    immediate: true
+  notify: Reload firewalld
