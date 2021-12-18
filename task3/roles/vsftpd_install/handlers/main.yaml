@@ -7,3 +7,8 @@
     state: restarted
   when: vsftpd_service_state != 'stopped'
   ignore_errors: yes
+
+- name: Restart firewalld
+  ansible.builtin.service:
+    name: firewalld
+    state: restarted
