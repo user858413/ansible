@@ -18,15 +18,18 @@
     state: touch
     owner: apache
     group: apache
+
 - name: Copy content to index.html
   copy:
     content: "{{ INDEX_HTML_CONTENT }}"
     dest:  /var/www/html/index.html
+    
 - name: start service apache
   service: 
     name: "{{ HTTPD_SERVICE }}"
     state: started
     enabled: yes
+
 - name: Check status of httpd service
   service_facts:
   register: service_state
