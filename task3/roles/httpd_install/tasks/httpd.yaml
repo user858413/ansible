@@ -1,0 +1,45 @@
+- name: Install pakages
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop: 
+    - httpd
+    
+- name:  Copy the nginx master configuration file
+  template: 
+    src: index.html 
+    dest: "{{ INDEX_HTML_PATH }}"
+    owner: apache
+    group: apache 
+
+- name: Create index.html
+  file: 
+    path: "{{ INDEX_HTML_PATH }}"
+    state: touch
+    owner: apache
+    group: apache
+- name: Copy content to index.html
+  copy:
+    content: "{{ INDEX_HTML_CONTENT }}"
+    dest:  /var/www/html/index.html
+- name: start service apache
+  service: 
+    name: "{{ HTTPD_SERVICE }}"
+    state: started
+    enabled: yes
+- name: Check status of httpd service
+  service_facts:
+  register: service_state
+- debug:
+    var: service_state.ansible_facts.services["httpd.service"].state  
+     
+- name: open 80\443 ports
+  firewalld:
+    zone: public
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  notify: Reload firewalld
+  loop:
+    - 80/tcp
+    - 443/tcp

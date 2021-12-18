@@ -1,0 +1,7 @@
+- hosts: web
+  remote_user: er
+  gather_facts: True
+
+  roles:
+    - role: httpd_install
+      tags: httpd
