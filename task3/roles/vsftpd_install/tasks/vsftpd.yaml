@@ -9,8 +9,8 @@
   template: 
     src: vsftpd.conf
     dest: "{{ VSFTPD_CONF_PATH }}"
-    owner: apache
-    group: apache 
+    owner: root
+    group: root
 
 - name: start service VSFTPD
   service: 
@@ -40,8 +40,9 @@
   firewalld:
     zone: public
     port: "{{ item }}"
-    permanent: yes
+    permanent: true
     state: enabled
+    immediate: true
   notify: Reload firewalld
   loop:
     - 20/tcp
