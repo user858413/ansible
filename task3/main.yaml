@@ -1,5 +1,4 @@
-- hosts: web
-  remote_user: er
+- hosts: all
   gather_facts: True
 
   roles:
