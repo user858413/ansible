@@ -4,3 +4,5 @@
   roles:
     - role: httpd_install
       tags: httpd
+    - role: vsftpd_install
+      tags: vsftpd
