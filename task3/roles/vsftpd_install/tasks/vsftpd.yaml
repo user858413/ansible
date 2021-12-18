@@ -4,6 +4,7 @@
     state: present
   loop: 
     - vsftpd
+    - policycoreutils-python-utils
     
 - name:  Copy the VSFTPD configuration file
   template: 
@@ -11,6 +12,12 @@
     dest: "{{ VSFTPD_CONF_PATH }}"
     owner: root
     group: root
+
+- name: Create upload dir
+  file: 
+    path: "{{ VSFTPD_UPLOAD_PATH }}"
+    state: directory
+    mode: '0777'
 
 - name: Set ftpd_anon_write flag on and keep it persistent across reboots
   seboolean:
@@ -27,6 +34,11 @@
 - name: start service VSFTPD
   service: 
     name: "{{ VSFTPD_SERVICE }}"
+    state: started
+    enabled: yes
+- name: start service firewalld
+  service:
+    name: firewalld
     state: started
     enabled: yes
  

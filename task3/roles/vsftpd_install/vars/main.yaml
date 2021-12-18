@@ -1,3 +1,4 @@
 ---
 VSFTPD_CONF_PATH: /etc/vsftpd/vsftpd.conf
 VSFTPD_SERVICE: vsftpd
+VSFTPD_UPLOAD_PATH: /var/ftp/pub/upload
